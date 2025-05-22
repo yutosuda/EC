@@ -1,0 +1,63 @@
+# 依存パッケージ
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnpm-debug.log
+
+# 環境設定
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ビルド成果物
+dist/
+build/
+out/
+.next/
+.nuxt/
+coverage/
+*.tsbuildinfo
+
+# キャッシュ
+.npm
+.eslintcache
+.cache
+.parcel-cache
+
+# エディタ関連
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+.DS_Store
+*.swp
+*.swo
+*~
+.cursor/
+
+# ログ
+logs
+*.log
+
+# テスト
+.nyc_output
+
+# MongoDBデータフォルダ（ローカル開発用）
+data/db/
+
+# バックアップファイル
+*.bak
+*.backup
+*.old
+
+# Jestスナップショット
+__snapshots__/
+
+# デバッグ
+.debug/ 
