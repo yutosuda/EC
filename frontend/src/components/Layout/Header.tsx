@@ -5,24 +5,28 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useCartStore } from '@/contexts/cartStore';
 import { useAuthStore } from '@/contexts/authStore';
+import { useHydration } from '@/hooks/useHydration';
 
 export const Header: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const getTotalItems = useCartStore(state => state.getTotalItems);
-  const cartItemCount = getTotalItems();
+  const isHydrated = useHydration();
   
-  const { user, isAuthenticated, logout, getCurrentUser } = useAuthStore(state => ({
-    user: state.user,
-    isAuthenticated: state.isAuthenticated,
-    logout: state.logout,
-    getCurrentUser: state.getCurrentUser
-  }));
+  // ハイドレーション完了後のみストアを使用
+  const cartStore = useCartStore();
+  const authStore = useAuthStore();
+  
+  // SSR時はデフォルト値を使用
+  const cartItemCount = isHydrated ? cartStore.getTotalItems() : 0;
+  const user = isHydrated ? authStore.user : null;
+  const isAuthenticated = isHydrated ? authStore.isAuthenticated : false;
 
   // ページロード時に認証情報を取得
   useEffect(() => {
-    getCurrentUser();
-  }, [getCurrentUser]);
+    if (isHydrated && typeof window !== 'undefined') {
+      authStore.getCurrentUser();
+    }
+  }, [isHydrated, authStore]);
 
   const isActive = (path: string) => {
     return pathname === path ? 'border-b-2 border-white' : '';
@@ -30,8 +34,10 @@ export const Header: React.FC = () => {
   
   // ログアウト処理
   const handleLogout = () => {
-    logout();
-    router.push('/');
+    if (isHydrated) {
+      authStore.logout();
+      router.push('/');
+    }
   };
 
   return (

@@ -3,18 +3,23 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCartStore } from '@/contexts/cartStore';
+import { useCartStore, CartItem } from '@/contexts/cartStore';
+import { useHydration } from '@/hooks/useHydration';
 
 export default function CartPage() {
   const router = useRouter();
-  const { 
-    items, 
-    updateQuantity, 
-    removeItem, 
-    clearCart, 
-    getTotalItems, 
-    getTotalPrice 
-  } = useCartStore();
+  const isHydrated = useHydration();
+  
+  // ハイドレーション完了後のみストアを使用
+  const store = useCartStore();
+  
+  // SSR時は空の配列とダミー関数を使用
+  const items: CartItem[] = isHydrated ? store.items : [];
+  const updateQuantity = isHydrated ? store.updateQuantity : () => {};
+  const removeItem = isHydrated ? store.removeItem : () => {};
+  const clearCart = isHydrated ? store.clearCart : () => {};
+  const getTotalItems = isHydrated ? store.getTotalItems : () => 0;
+  const getTotalPrice = isHydrated ? store.getTotalPrice : () => 0;
 
   // 価格表示用のフォーマッタ
   const formatPrice = (price: number) => {
@@ -45,6 +50,18 @@ export default function CartPage() {
     // TODO: 認証状態をチェックし、未ログインの場合はログインページへリダイレクト
     router.push('/checkout');
   };
+
+  // ハイドレーション完了前はローディング表示
+  if (!isHydrated) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-6">ショッピングカート</h1>
+        <div className="bg-white rounded-lg shadow p-6 text-center">
+          <p className="text-lg">読み込み中...</p>
+        </div>
+      </div>
+    );
+  }
 
   // カートが空の場合
   if (items.length === 0) {

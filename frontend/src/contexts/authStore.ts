@@ -214,14 +214,12 @@ export const useAuthStore = create<AuthState>()(
           });
           throw error;
         }
-      }
+      },
     }),
     {
-      name: 'construction-ec-auth', // ローカルストレージのキー
-      partialize: (state) => ({
-        token: state.token,
-        user: state.user
-      })
+      name: 'construction-ec-auth',
+      // SSR対応: サーバーサイドでは永続化しない
+      skipHydration: true,
     }
   )
 ); 

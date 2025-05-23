@@ -85,8 +85,9 @@ export const useCartStore = create<CartState>()(
       },
     }),
     {
-      name: 'construction-ec-cart', // ローカルストレージのキー
-      partialize: (state) => ({ items: state.items }), // 永続化する状態のみを指定
+      name: 'construction-ec-cart',
+      // SSR対応: サーバーサイドでは永続化しない
+      skipHydration: true,
     }
   )
 ); 

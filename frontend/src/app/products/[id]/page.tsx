@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { apiClient } from '@/api/apiClient';
 import { useCartStore, CartItem } from '@/contexts/cartStore';
+import ReviewSection from './components/ReviewSection';
 
 interface ProductDetail {
   _id: string;
@@ -341,6 +342,11 @@ export default function ProductDetailPage() {
           </div>
         </div>
       )}
+
+      {/* レビューセクション */}
+      <div className="mt-12">
+        <ReviewSection productId={product._id} />
+      </div>
     </div>
   );
 } 
