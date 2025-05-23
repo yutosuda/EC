@@ -2,15 +2,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { authRoutes } from './routes/auth.routes';
-import { productRoutes } from './routes/product.routes';
-import { categoryRoutes } from './routes/category.routes';
-import { orderRoutes } from './routes/order.routes';
-import { cartRoutes } from './routes/cart.routes';
-import { wishlistRoutes } from './routes/wishlist.routes';
-import { reviewRoutes } from './routes/review.routes';
-import { couponRoutes } from './routes/coupon.routes';
+import { apiRouter } from './routes';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
+import { setupSwagger } from './utils/swagger';
 
 // 環境変数の読み込み
 dotenv.config();
@@ -41,14 +35,12 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // APIルート
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/wishlist', wishlistRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/coupons', couponRoutes);
+app.use('/api', apiRouter);
+
+// Swagger APIドキュメント設定（開発環境のみ）
+if (process.env.NODE_ENV !== 'production') {
+  setupSwagger(app);
+}
 
 // 404ハンドラー - 存在しないルートに対するハンドラー
 app.use(notFoundHandler);
@@ -60,4 +52,5 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`サーバーがポート${PORT}で起動しました`);
+  console.log(`API ドキュメント: http://localhost:${PORT}/api-docs`);
 }); 

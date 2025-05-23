@@ -21,7 +21,8 @@
     "test:backend": "jest --testPathPattern=src/backend",
     "test:validation": "jest --testPathPattern=src/backend/tests/validation",
     "test:error": "jest --testPathPattern=src/backend/tests/error",
-    "test:models": "ts-node src/backend/tests/models/testDataModels.ts"
+    "test:models": "ts-node src/backend/tests/models/testDataModels.ts",
+    "test:api": "jest --testPathPattern=src/backend/tests/api.test.ts"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,9 @@
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "stripe": "^15.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
@@ -55,6 +59,9 @@
     "@types/express": "^5.0.2",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "autoprefixer": "^10.4.21",

@@ -8,9 +8,17 @@ export interface IUser extends Document {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'business';
+  accountType: 'individual' | 'business';
   companyName?: string;
   department?: string;
+  position?: string;
+  businessType?: string;
+  taxId?: string;
+  isApproved?: boolean;
+  specialPricing?: boolean;
+  creditLimit?: number;
+  paymentTerms?: string;
   addresses: {
     addressType: 'shipping' | 'billing';
     postalCode: string;
@@ -56,8 +64,13 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['user', 'admin'],
+      enum: ['user', 'admin', 'business'],
       default: 'user',
+    },
+    accountType: {
+      type: String,
+      enum: ['individual', 'business'],
+      default: 'individual',
     },
     companyName: {
       type: String,
@@ -66,6 +79,32 @@ const userSchema = new Schema<IUser>(
     department: {
       type: String,
       trim: true,
+    },
+    position: {
+      type: String,
+      trim: true,
+    },
+    businessType: {
+      type: String,
+      trim: true,
+    },
+    taxId: {
+      type: String,
+      trim: true,
+    },
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
+    specialPricing: {
+      type: Boolean,
+      default: false,
+    },
+    creditLimit: {
+      type: Number,
+    },
+    paymentTerms: {
+      type: String,
     },
     addresses: [
       {
