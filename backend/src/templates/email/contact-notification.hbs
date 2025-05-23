@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新しいお問い合わせ</title>
+  <style>
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .email-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #dc2626;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #dc2626;
+      margin: 0;
+      font-size: 24px;
+    }
+    .urgent-notice {
+      background-color: #fef2f2;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #dc2626;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .customer-info {
+      background-color: #f0f9ff;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #0ea5e9;
+      margin: 20px 0;
+    }
+    .inquiry-details {
+      background-color: #f9fafb;
+      padding: 20px;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+      margin: 20px 0;
+    }
+    .action-button {
+      display: inline-block;
+      background-color: #dc2626;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 10px 5px;
+    }
+    .secondary-button {
+      display: inline-block;
+      background-color: #6b7280;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 10px 5px;
+    }
+    .footer {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .alert-icon {
+      text-align: center;
+      font-size: 48px;
+      color: #dc2626;
+      margin: 20px 0;
+    }
+    .response-guidelines {
+      background-color: #fef3c7;
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #f59e0b;
+      margin: 20px 0;
+    }
+    .message-content {
+      background-color: #fff;
+      padding: 15px;
+      border: 2px solid #e5e7eb;
+      border-radius: 6px;
+      margin: 10px 0;
+      white-space: pre-line;
+      font-family: monospace;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>🚨 新しいお問い合わせ</h1>
+    </div>
+    
+    <div class="content">
+      <div class="alert-icon">📞</div>
+      
+      <div class="urgent-notice">
+        <h2>新しいお問い合わせが届きました</h2>
+        <p><strong>受付日時:</strong> {{submittedAt}}</p>
+        <p><strong>お問い合わせ種別:</strong> {{inquiryType}}</p>
+      </div>
+      
+      <div class="customer-info">
+        <h3>お客様情報</h3>
+        <p><strong>お名前:</strong> {{customerName}}</p>
+        <p><strong>メールアドレス:</strong> <a href="mailto:{{customerEmail}}">{{customerEmail}}</a></p>
+        {{#if customerPhone}}
+        <p><strong>電話番号:</strong> <a href="tel:{{customerPhone}}">{{customerPhone}}</a></p>
+        {{/if}}
+      </div>
+      
+      <div class="inquiry-details">
+        <h3>お問い合わせ内容</h3>
+        <div class="message-content">{{message}}</div>
+      </div>
+      
+      <div class="response-guidelines">
+        <h3>⏰ 対応ガイドライン</h3>
+        <ul>
+          <li><strong>緊急度高:</strong> 1時間以内に初回返信</li>
+          <li><strong>一般的な問い合わせ:</strong> 2営業日以内に回答</li>
+          <li><strong>技術的な質問:</strong> 専門スタッフに転送・3営業日以内</li>
+          <li><strong>苦情・クレーム:</strong> 即座にマネージャーに報告</li>
+        </ul>
+      </div>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="{{adminUrl}}" class="action-button">管理画面で確認</a>
+        <a href="mailto:{{customerEmail}}?subject=【建設資材EC】お問い合わせありがとうございます&body=お世話になっております。%0D%0A建設資材株式会社の〇〇です。%0D%0A%0D%0Aこの度はお問い合わせいただき、ありがとうございます。" class="secondary-button">直接返信</a>
+      </div>
+      
+      <div class="customer-info">
+        <h3>対応履歴チェックポイント</h3>
+        <ul>
+          <li>過去の問い合わせ履歴を確認</li>
+          <li>購入履歴・会員情報をチェック</li>
+          <li>類似の問い合わせがあるか確認</li>
+          <li>必要に応じて関連部署に連携</li>
+        </ul>
+      </div>
+      
+      <div class="inquiry-details">
+        <h3>問い合わせ種別別対応方法</h3>
+        <ul>
+          <li><strong>商品について:</strong> 製品情報・在庫担当に確認</li>
+          <li><strong>注文について:</strong> 注文管理システムで詳細確認</li>
+          <li><strong>配送について:</strong> 物流担当・配送業者に確認</li>
+          <li><strong>支払いについて:</strong> 経理・決済システムで確認</li>
+          <li><strong>会員登録について:</strong> IT担当・ユーザー管理で確認</li>
+          <li><strong>その他:</strong> マネージャーに相談後対応</li>
+        </ul>
+      </div>
+      
+      <div class="urgent-notice">
+        <p><strong>重要:</strong> この問い合わせには必ず24時間以内に何らかの返信をしてください</p>
+        <p>即座に回答できない場合は、受付確認と回答予定日をお知らせください</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>このメールは自動送信されています。</p>
+      <p>建設資材株式会社 カスタマーサポートシステム</p>
+    </div>
+  </div>
+</body>
+</html> 

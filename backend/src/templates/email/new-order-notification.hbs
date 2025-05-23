@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新規注文受付</title>
+  <style>
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .email-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #059669;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #059669;
+      margin: 0;
+      font-size: 24px;
+    }
+    .order-summary {
+      background-color: #ecfdf5;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #059669;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .customer-info {
+      background-color: #f0f9ff;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #0ea5e9;
+      margin: 20px 0;
+    }
+    .order-details {
+      background-color: #f9fafb;
+      padding: 20px;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+      margin: 20px 0;
+    }
+    .action-section {
+      background-color: #fef3c7;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #f59e0b;
+      margin: 20px 0;
+    }
+    .action-button {
+      display: inline-block;
+      background-color: #059669;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 10px 5px;
+    }
+    .secondary-button {
+      display: inline-block;
+      background-color: #2563eb;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 10px 5px;
+    }
+    .footer {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .order-icon {
+      text-align: center;
+      font-size: 48px;
+      color: #059669;
+      margin: 20px 0;
+    }
+    .urgent-info {
+      background-color: #fef2f2;
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #dc2626;
+      margin: 20px 0;
+    }
+    .amount-highlight {
+      font-size: 24px;
+      font-weight: bold;
+      color: #059669;
+      text-align: center;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>🛒 新規注文受付</h1>
+    </div>
+    
+    <div class="content">
+      <div class="order-icon">📦</div>
+      
+      <div class="order-summary">
+        <h2>新しい注文が入りました</h2>
+        <p><strong>注文番号:</strong> {{orderNumber}}</p>
+        <p><strong>注文日時:</strong> {{orderDate}}</p>
+        <div class="amount-highlight">¥{{totalAmount}} (税込)</div>
+        <p>商品点数: {{itemCount}}点</p>
+      </div>
+      
+      <div class="customer-info">
+        <h3>お客様情報</h3>
+        <p><strong>お名前:</strong> {{customerName}}</p>
+        <p><strong>メールアドレス:</strong> <a href="mailto:{{customerEmail}}">{{customerEmail}}</a></p>
+      </div>
+      
+      <div class="action-section">
+        <h3>⚡ 即座に対応が必要な作業</h3>
+        <ol>
+          <li><strong>在庫確認:</strong> 注文商品の在庫状況を確認</li>
+          <li><strong>決済確認:</strong> 決済処理が正常に完了しているか確認</li>
+          <li><strong>配送準備:</strong> 配送先住所の確認と梱包準備</li>
+          <li><strong>顧客連絡:</strong> 必要に応じて顧客への連絡</li>
+        </ol>
+      </div>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="{{adminUrl}}" class="action-button">注文管理画面で確認</a>
+        <a href="mailto:{{customerEmail}}?subject=【建設資材EC】ご注文ありがとうございます（注文番号：{{orderNumber}}）&body=お世話になっております。%0D%0A建設資材株式会社の〇〇です。%0D%0A%0D%0Aこの度はご注文いただき、ありがとうございます。" class="secondary-button">顧客に連絡</a>
+      </div>
+      
+      <div class="order-details">
+        <h3>処理チェックリスト</h3>
+        <ul>
+          <li>□ 注文内容の確認完了</li>
+          <li>□ 在庫確認・引当完了</li>
+          <li>□ 決済確認完了</li>
+          <li>□ 配送先住所の確認完了</li>
+          <li>□ 梱包指示・特記事項確認</li>
+          <li>□ 配送業者手配</li>
+          <li>□ 顧客への進捗連絡</li>
+        </ul>
+      </div>
+      
+      <div class="urgent-info">
+        <h3>🚨 緊急対応が必要な場合</h3>
+        <ul>
+          <li><strong>在庫不足:</strong> 即座に顧客に連絡・代替案提示</li>
+          <li><strong>決済エラー:</strong> 決済システム確認・顧客連絡</li>
+          <li><strong>配送不可地域:</strong> 配送方法調整・顧客相談</li>
+          <li><strong>特殊配送要求:</strong> 物流担当・配送業者と調整</li>
+        </ul>
+      </div>
+      
+      <div class="customer-info">
+        <h3>注文分析情報</h3>
+        <p><strong>注文規模:</strong> {{#if (gt totalAmount 50000)}}大口注文 🔥{{else}}{{#if (gt totalAmount 20000)}}中規模注文{{else}}通常注文{{/if}}{{/if}}</p>
+        <p><strong>優先度:</strong> {{#if (gt totalAmount 50000)}}高優先{{else}}標準{{/if}}</p>
+        <p><strong>推奨対応時間:</strong> {{#if (gt totalAmount 50000)}}1時間以内{{else}}4時間以内{{/if}}</p>
+      </div>
+      
+      <div class="order-summary">
+        <h3>📈 今月の注文状況</h3>
+        <p>この注文を含めて継続的な売上向上にご協力ください</p>
+        <p>迅速で丁寧な対応が顧客満足度向上に繋がります</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>このメールは自動送信されています。</p>
+      <p>建設資材株式会社 注文管理システム</p>
+    </div>
+  </div>
+</body>
+</html> 

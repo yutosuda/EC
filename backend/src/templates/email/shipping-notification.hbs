@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品発送完了</title>
+  <style>
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .email-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #dc2626;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #dc2626;
+      margin: 0;
+      font-size: 24px;
+    }
+    .shipping-info {
+      background-color: #fef2f2;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #dc2626;
+      margin: 20px 0;
+    }
+    .tracking-section {
+      background-color: #eff6ff;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #2563eb;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .tracking-number {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2563eb;
+      margin: 10px 0;
+      letter-spacing: 1px;
+    }
+    .button {
+      display: inline-block;
+      background-color: #2563eb;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 10px;
+    }
+    .footer {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .delivery-icon {
+      text-align: center;
+      font-size: 48px;
+      color: #dc2626;
+      margin: 20px 0;
+    }
+    .timeline {
+      background-color: #f9fafb;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+    .timeline ol {
+      margin: 0;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>商品発送完了</h1>
+    </div>
+    
+    <div class="content">
+      <div class="delivery-icon">🚛</div>
+      
+      <h2>{{userName}} 様</h2>
+      
+      <p>この度は、建設資材ECサイトをご利用いただき、誠にありがとうございます。</p>
+      
+      <p>ご注文いただきました商品の発送が完了いたしました。</p>
+      
+      <div class="shipping-info">
+        <h3>発送情報</h3>
+        <p><strong>注文番号:</strong> {{orderNumber}}</p>
+        <p><strong>発送日:</strong> {{shippedDate}}</p>
+        <p><strong>配送業者:</strong> {{shippingCompany}}</p>
+      </div>
+      
+      {{#if trackingNumber}}
+      <div class="tracking-section">
+        <h3>配送追跡情報</h3>
+        <p>以下の追跡番号で配送状況をご確認いただけます</p>
+        <div class="tracking-number">{{trackingNumber}}</div>
+        {{#if trackingUrl}}
+        <a href="{{trackingUrl}}" class="button" target="_blank">配送状況を追跡</a>
+        {{/if}}
+      </div>
+      {{/if}}
+      
+      <div class="timeline">
+        <h3>お届けまでの流れ</h3>
+        <ol>
+          <li>商品が集荷センターに到着</li>
+          <li>配送センターで仕分け処理</li>
+          <li>お届け地域の営業所に到着</li>
+          <li>配達員がお届けに伺います</li>
+        </ol>
+        <p><strong>※お届け予定：</strong> 発送から1〜3営業日程度</p>
+      </div>
+      
+      <div class="shipping-info">
+        <h3>商品到着時のお願い</h3>
+        <ul>
+          <li>商品の状態をご確認ください</li>
+          <li>破損や不具合がございましたら、すぐにご連絡ください</li>
+          <li>配送業者への受領確認をお願いいたします</li>
+        </ul>
+      </div>
+      
+      <div class="tracking-section">
+        <p><strong>お問い合わせ先</strong></p>
+        <p>配送に関するお問い合わせは、追跡番号を明記の上、以下までご連絡ください。</p>
+        <p>メール: shipping@construction-ec.com<br>
+        電話: 03-XXXX-XXXX（平日 9:00〜18:00）</p>
+      </div>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <p>商品がお手元に届きましたら、ぜひレビューをお聞かせください。</p>
+        <p>今後ともどうぞよろしくお願いいたします。</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>このメールは自動送信されています。ご返信いただいても回答できませんのでご了承ください。</p>
+      <p>建設資材株式会社<br>
+      〒100-0001 東京都千代田区千代田1-1-1<br>
+      TEL: 03-XXXX-XXXX</p>
+    </div>
+  </div>
+</body>
+</html> 

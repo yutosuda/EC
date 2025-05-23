@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ご注文受付完了</title>
+  <style>
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .email-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #059669;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #059669;
+      margin: 0;
+      font-size: 24px;
+    }
+    .order-info {
+      background-color: #f0fdf4;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #059669;
+      margin: 20px 0;
+    }
+    .order-info .order-number {
+      font-size: 18px;
+      font-weight: bold;
+      color: #059669;
+      margin-bottom: 10px;
+    }
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .items-table th,
+    .items-table td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    .items-table th {
+      background-color: #f9fafb;
+      font-weight: bold;
+    }
+    .total-section {
+      text-align: right;
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f9fafb;
+      border-radius: 6px;
+    }
+    .total-amount {
+      font-size: 18px;
+      font-weight: bold;
+      color: #059669;
+    }
+    .shipping-info {
+      background-color: #eff6ff;
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #2563eb;
+      margin: 20px 0;
+    }
+    .button {
+      display: inline-block;
+      background-color: #059669;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .footer {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>ご注文受付完了</h1>
+    </div>
+    
+    <div class="content">
+      <h2>{{userName}} 様</h2>
+      
+      <p>この度は、建設資材ECサイトをご利用いただき、誠にありがとうございます。</p>
+      
+      <p>ご注文を受け付けいたしました。以下にご注文内容をご確認ください。</p>
+      
+      <div class="order-info">
+        <div class="order-number">注文番号: {{orderNumber}}</div>
+        <div>注文日: {{orderDate}}</div>
+      </div>
+      
+      <h3>ご注文商品</h3>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>商品名</th>
+            <th>数量</th>
+            <th>単価</th>
+            <th>小計</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each items}}
+          <tr>
+            <td>{{this.productSnapshot.name}}<br><small>商品コード: {{this.productSnapshot.sku}}</small></td>
+            <td>{{this.quantity}}</td>
+            <td>¥{{this.price}}</td>
+            <td>¥{{this.total}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      
+      <div class="total-section">
+        <div class="total-amount">
+          合計金額: ¥{{totalAmount}} (税込)
+        </div>
+      </div>
+      
+      <div class="shipping-info">
+        <h3>配送先住所</h3>
+        <p>
+          〒{{shippingAddress.postalCode}}<br>
+          {{shippingAddress.prefecture}}{{shippingAddress.city}}<br>
+          {{shippingAddress.address1}}<br>
+          {{#if shippingAddress.address2}}{{shippingAddress.address2}}<br>{{/if}}
+        </p>
+      </div>
+      
+      <h3>今後の流れ</h3>
+      <ol>
+        <li>ご入金の確認が取れ次第、商品の準備を開始いたします</li>
+        <li>商品の準備が整い次第、発送いたします</li>
+        <li>発送時に、追跡番号をご連絡いたします</li>
+        <li>商品到着後、何かご不明な点がございましたらお気軽にお問い合わせください</li>
+      </ol>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="{{orderUrl}}" class="button">注文詳細を確認</a>
+      </div>
+      
+      <div class="shipping-info">
+        <p><strong>お問い合わせ先</strong></p>
+        <p>ご注文に関するお問い合わせは、注文番号を明記の上、以下までご連絡ください。</p>
+        <p>メール: order@construction-ec.com<br>
+        電話: 03-XXXX-XXXX（平日 9:00〜18:00）</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>このメールは自動送信されています。ご返信いただいても回答できませんのでご了承ください。</p>
+      <p>建設資材株式会社<br>
+      〒100-0001 東京都千代田区千代田1-1-1<br>
+      TEL: 03-XXXX-XXXX</p>
+    </div>
+  </div>
+</body>
+</html> 

@@ -18,5 +18,4 @@ afterEach(async () => {
 jest.setTimeout(30000);
 
 // グローバルなモックやフラグ設定
-process.env.TEST_MODE = 'true';
-process.env.NODE_ENV = 'test'; 
+process.env.TEST_MODE = 'true'; 

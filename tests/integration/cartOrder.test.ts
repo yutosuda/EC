@@ -37,19 +37,24 @@ describe('カート機能と注文処理の連携テスト', () => {
   let closeServer: () => Promise<void>;
   let productId: string;
   let userId: string;
+  let app: express.Application;
 
   // 全テスト開始前の共通セットアップ
   beforeAll(async () => {
-    const app = getApp();
-    const env = await setupTestEnvironment(app);
+    // テスト環境のセットアップ
+    const env = await setupTestEnvironment();
+    app = env.app;
+    closeServer = env.closeServer;
     apiClient = env.apiClient;
     mongod = env.mongod;
-    closeServer = env.closeServer;
   });
 
   // 全テスト終了後のクリーンアップ
   afterAll(async () => {
-    await closeServer();
+    // テスト環境のクリーンアップ
+    if (closeServer) {
+      await closeServer();
+    }
   });
 
   // 各テスト前の共通セットアップと必要なデータ作成

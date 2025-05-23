@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ受付完了</title>
+  <style>
+    body {
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .email-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #7c3aed;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #7c3aed;
+      margin: 0;
+      font-size: 24px;
+    }
+    .inquiry-info {
+      background-color: #f3e8ff;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #7c3aed;
+      margin: 20px 0;
+    }
+    .response-info {
+      background-color: #ecfdf5;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #059669;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .message-box {
+      background-color: #f9fafb;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      border: 1px solid #e5e7eb;
+    }
+    .footer {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .contact-icon {
+      text-align: center;
+      font-size: 48px;
+      color: #7c3aed;
+      margin: 20px 0;
+    }
+    .support-info {
+      background-color: #eff6ff;
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #2563eb;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>お問い合わせ受付完了</h1>
+    </div>
+    
+    <div class="content">
+      <div class="contact-icon">📧</div>
+      
+      <h2>{{userName}} 様</h2>
+      
+      <p>この度は、建設資材ECサイトにお問い合わせいただき、誠にありがとうございます。</p>
+      
+      <p>お問い合わせを受け付けいたしました。以下にお問い合わせ内容をご確認ください。</p>
+      
+      <div class="inquiry-info">
+        <h3>お問い合わせ内容</h3>
+        <p><strong>お問い合わせ種別:</strong> {{inquiryType}}</p>
+        <p><strong>受付日時:</strong> {{submittedAt}}</p>
+      </div>
+      
+      <div class="message-box">
+        <h3>お問い合わせ詳細</h3>
+        <p style="white-space: pre-line;">{{message}}</p>
+      </div>
+      
+      <div class="response-info">
+        <h3>回答予定について</h3>
+        <p><strong>回答予定時期:</strong> {{responseTime}}</p>
+        <p>担当者が内容を確認の上、回答いたします</p>
+        <p>お急ぎの場合は、お電話でもお問い合わせください</p>
+      </div>
+      
+      <div class="inquiry-info">
+        <h3>お問い合わせ内容について</h3>
+        <ul>
+          <li>ご質問内容によっては、回答にお時間をいただく場合があります</li>
+          <li>技術的なお問い合わせは、専門スタッフが対応いたします</li>
+          <li>土日祝日は回答をお休みさせていただいております</li>
+          <li>回答は、このメールアドレス宛にお送りいたします</li>
+        </ul>
+      </div>
+      
+      <div class="support-info">
+        <h3>その他のお問い合わせ方法</h3>
+        <p><strong>お電話でのお問い合わせ</strong></p>
+        <p>TEL: 03-XXXX-XXXX<br>
+        営業時間: 平日 9:00〜18:00（土日祝日を除く）</p>
+        
+        <p><strong>メールでのお問い合わせ</strong></p>
+        <p>Email: <a href="mailto:{{supportEmail}}">{{supportEmail}}</a></p>
+        
+        <p><strong>緊急時のお問い合わせ</strong></p>
+        <p>配送トラブルや緊急のご相談は、上記電話番号までご連絡ください</p>
+      </div>
+      
+      <div class="response-info">
+        <p><strong>よくあるご質問</strong></p>
+        <p>お問い合わせの前に、FAQページもご確認ください。</p>
+        <p>多くのご質問にお答えしております。</p>
+      </div>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <p>貴重なお時間をいただき、ありがとうございました。</p>
+        <p>今後ともどうぞよろしくお願いいたします。</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>このメールは自動送信されています。ご返信いただいても回答できませんのでご了承ください。</p>
+      <p>建設資材株式会社<br>
+      〒100-0001 東京都千代田区千代田1-1-1<br>
+      TEL: 03-XXXX-XXXX</p>
+    </div>
+  </div>
+</body>
+</html> 
