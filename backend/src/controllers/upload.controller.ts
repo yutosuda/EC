@@ -3,7 +3,7 @@ import { imageService } from '../services/image.service';
 import path from 'path';
 
 interface UploadRequest extends Request {
-  files?: Express.Multer.File[];
+  files?: Express.Multer.File[] | { [fieldname: string]: Express.Multer.File[] };
   file?: Express.Multer.File;
 }
 
@@ -11,15 +11,16 @@ export class UploadController {
   /**
    * 商品画像のアップロード（複数ファイル対応）
    */
-  uploadProductImages = async (req: UploadRequest, res: Response): Promise<Response | void> => {
+  uploadProductImages = async (req: UploadRequest, res: Response): Promise<void> => {
     try {
       const files = req.files as Express.Multer.File[];
       
       if (!files || files.length === 0) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: 'アップロードする画像ファイルが選択されていません'
         });
+        return;
       }
 
       const processedImages: any[] = [];
@@ -84,11 +85,11 @@ export class UploadController {
         response.message += ` (${errors.length}件のエラーがありました)`;
       }
 
-      return res.status(200).json(response);
+      res.status(200).json(response);
 
     } catch (error) {
       console.error('商品画像アップロードエラー:', error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: '画像のアップロードに失敗しました'
       });
@@ -98,24 +99,26 @@ export class UploadController {
   /**
    * カテゴリ画像のアップロード（単一ファイル）
    */
-  uploadCategoryImage = async (req: UploadRequest, res: Response): Promise<Response | void> => {
+  uploadCategoryImage = async (req: UploadRequest, res: Response): Promise<void> => {
     try {
       const file = req.file;
       
       if (!file) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: 'アップロードする画像ファイルが選択されていません'
         });
+        return;
       }
 
       // 画像バリデーション
       const validation = await imageService.validateImage(file.path);
       if (!validation.valid) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: validation.error
         });
+        return;
       }
 
       // ファイル名の基本部分を取得
@@ -135,7 +138,7 @@ export class UploadController {
       );
       const webpInfo = await imageService.optimizeForWeb(file.path, webpPath);
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: 'カテゴリ画像がアップロードされました',
         image: {
@@ -156,7 +159,7 @@ export class UploadController {
 
     } catch (error) {
       console.error('カテゴリ画像アップロードエラー:', error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: '画像のアップロードに失敗しました'
       });
@@ -166,15 +169,16 @@ export class UploadController {
   /**
    * 画像の削除
    */
-  deleteImage = async (req: Request, res: Response): Promise<Response | void> => {
+  deleteImage = async (req: Request, res: Response): Promise<void> => {
     try {
       const { filename } = req.params;
       
       if (!filename) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: 'ファイル名が指定されていません'
         });
+        return;
       }
 
       // 各ディレクトリから画像ファイルを削除
@@ -209,12 +213,12 @@ export class UploadController {
       }
 
       if (deletedCount > 0) {
-        return res.status(200).json({
+        res.status(200).json({
           success: true,
           message: '画像が削除されました'
         });
       } else {
-        return res.status(404).json({
+        res.status(404).json({
           success: false,
           message: '指定された画像ファイルが見つかりません'
         });
@@ -222,7 +226,7 @@ export class UploadController {
 
     } catch (error) {
       console.error('画像削除エラー:', error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: '画像の削除に失敗しました'
       });
@@ -232,15 +236,16 @@ export class UploadController {
   /**
    * 画像情報の取得
    */
-  getImageInfo = async (req: Request, res: Response): Promise<Response | void> => {
+  getImageInfo = async (req: Request, res: Response): Promise<void> => {
     try {
       const { filename } = req.params;
       
       if (!filename) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: 'ファイル名が指定されていません'
         });
+        return;
       }
 
       // 各ディレクトリから画像ファイルを検索
@@ -256,7 +261,7 @@ export class UploadController {
           const metadata = await imageService.getImageInfo(imagePath);
           const stats = require('fs').statSync(imagePath);
 
-          return res.status(200).json({
+          res.status(200).json({
             success: true,
             imageInfo: {
               filename,
@@ -269,6 +274,7 @@ export class UploadController {
               modified: stats.mtime
             }
           });
+          return;
 
         } catch (error) {
           // このディレクトリにはファイルが存在しない、次のディレクトリを確認
@@ -276,14 +282,14 @@ export class UploadController {
         }
       }
 
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: '指定された画像ファイルが見つかりません'
       });
 
     } catch (error) {
       console.error('画像情報取得エラー:', error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: '画像情報の取得に失敗しました'
       });
@@ -293,11 +299,11 @@ export class UploadController {
   /**
    * 一時ファイルのクリーンアップ
    */
-  cleanupTempFiles = async (req: Request, res: Response): Promise<Response | void> => {
+  cleanupTempFiles = async (req: Request, res: Response): Promise<void> => {
     try {
       const deletedCount = await imageService.cleanupTempFiles();
 
-      return res.status(200).json({
+      res.status(200).json({
         success: true,
         message: `${deletedCount}個の一時ファイルが削除されました`,
         deletedCount
@@ -305,7 +311,7 @@ export class UploadController {
 
     } catch (error) {
       console.error('一時ファイルクリーンアップエラー:', error);
-      return res.status(500).json({
+      res.status(500).json({
         success: false,
         message: '一時ファイルのクリーンアップに失敗しました'
       });

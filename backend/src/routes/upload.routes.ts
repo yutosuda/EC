@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { UploadController } from '../controllers/upload.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
 import { 
@@ -19,7 +19,7 @@ router.post(
   '/products',
   authMiddleware.verifyToken,
   authMiddleware.verifyAdmin,
-  (req, res, next) => {
+  (req: Request, res: Response, next: NextFunction): void => {
     uploadProductImages(req, res, (error) => {
       if (error) {
         return handleUploadError(error, req, res, next);
@@ -27,7 +27,7 @@ router.post(
       next();
     });
   },
-  uploadController.uploadProductImages
+  uploadController.uploadProductImages.bind(uploadController)
 );
 
 /**
@@ -39,7 +39,7 @@ router.post(
   '/categories',
   authMiddleware.verifyToken,
   authMiddleware.verifyAdmin,
-  (req, res, next) => {
+  (req: Request, res: Response, next: NextFunction): void => {
     uploadCategoryImage(req, res, (error) => {
       if (error) {
         return handleUploadError(error, req, res, next);
@@ -47,7 +47,7 @@ router.post(
       next();
     });
   },
-  uploadController.uploadCategoryImage
+  uploadController.uploadCategoryImage.bind(uploadController)
 );
 
 /**
@@ -59,7 +59,7 @@ router.delete(
   '/:filename',
   authMiddleware.verifyToken,
   authMiddleware.verifyAdmin,
-  uploadController.deleteImage
+  uploadController.deleteImage.bind(uploadController)
 );
 
 /**
@@ -71,7 +71,7 @@ router.get(
   '/:filename/info',
   authMiddleware.verifyToken,
   authMiddleware.verifyAdmin,
-  uploadController.getImageInfo
+  uploadController.getImageInfo.bind(uploadController)
 );
 
 /**
@@ -83,7 +83,7 @@ router.post(
   '/cleanup',
   authMiddleware.verifyToken,
   authMiddleware.verifyAdmin,
-  uploadController.cleanupTempFiles
+  uploadController.cleanupTempFiles.bind(uploadController)
 );
 
 export default router; 
