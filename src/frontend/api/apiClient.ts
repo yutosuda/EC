@@ -1,23 +1,33 @@
 /**
- * APIリクエストを行うためのクライアントクラス
+ * APIクライアント
+ * バックエンドAPIとの通信を処理する
  */
-export class ApiClient {
-  private baseUrl: string;
+
+// 環境変数からAPIのベースURLを取得
+const API_BASE_URL = process.env.API_URL || 'http://localhost:5000/api';
+
+// APIリクエストのレスポンス型
+interface ApiResponse<T> {
+  success: boolean;
+  message?: string;
+  [key: string]: any;
+}
+
+/**
+ * APIクライアントクラス
+ */
+class ApiClient {
   private token: string | null = null;
 
-  constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-  }
-
   /**
-   * 認証トークンを設定
+   * JWTトークンを設定
    */
   setToken(token: string): void {
     this.token = token;
   }
 
   /**
-   * 認証トークンをクリア
+   * JWTトークンをクリア
    */
   clearToken(): void {
     this.token = null;
@@ -39,99 +49,69 @@ export class ApiClient {
   }
 
   /**
-   * GETリクエスト
+   * APIリクエストを実行
    */
-  async get<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
-    const url = new URL(`${this.baseUrl}${endpoint}`);
-    
-    if (params) {
-      Object.keys(params).forEach(key => 
-        url.searchParams.append(key, params[key])
-      );
-    }
-
-    const response = await fetch(url.toString(), {
-      method: 'GET',
+  private async request<T>(
+    endpoint: string,
+    method: string,
+    body?: any
+  ): Promise<T> {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const options: RequestInit = {
+      method,
       headers: this.getHeaders(),
-    });
+      body: body ? JSON.stringify(body) : undefined,
+    };
 
-    if (!response.ok) {
-      throw await this.handleError(response);
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+
+      if (!response.ok) {
+        // エラーレスポンスの場合
+        const error: any = new Error(data.message || 'APIリクエストに失敗しました');
+        error.status = response.status;
+        error.response = data;
+        throw error;
+      }
+
+      return data as T;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('APIリクエストに失敗しました');
     }
-
-    return response.json();
   }
 
   /**
-   * POSTリクエスト
+   * GET リクエスト
    */
-  async post<T>(endpoint: string, data?: any): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
-      method: 'POST',
-      headers: this.getHeaders(),
-      body: data ? JSON.stringify(data) : undefined,
-    });
-
-    if (!response.ok) {
-      throw await this.handleError(response);
-    }
-
-    return response.json();
+  async get<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, 'GET');
   }
 
   /**
-   * PUTリクエスト
+   * POST リクエスト
    */
-  async put<T>(endpoint: string, data?: any): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
-      method: 'PUT',
-      headers: this.getHeaders(),
-      body: data ? JSON.stringify(data) : undefined,
-    });
-
-    if (!response.ok) {
-      throw await this.handleError(response);
-    }
-
-    return response.json();
+  async post<T>(endpoint: string, data: any): Promise<T> {
+    return this.request<T>(endpoint, 'POST', data);
   }
 
   /**
-   * DELETEリクエスト
+   * PUT リクエスト
+   */
+  async put<T>(endpoint: string, data: any): Promise<T> {
+    return this.request<T>(endpoint, 'PUT', data);
+  }
+
+  /**
+   * DELETE リクエスト
    */
   async delete<T>(endpoint: string): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
-      method: 'DELETE',
-      headers: this.getHeaders(),
-    });
-
-    if (!response.ok) {
-      throw await this.handleError(response);
-    }
-
-    return response.json();
-  }
-
-  /**
-   * エラーハンドリング
-   */
-  private async handleError(response: Response): Promise<Error> {
-    let errorMessage = `API Error: ${response.status}`;
-    
-    try {
-      const errorData = await response.json();
-      if (errorData.message) {
-        errorMessage = errorData.message;
-      }
-    } catch (e) {
-      // JSONとして解析できない場合は、デフォルトのエラーメッセージを使用
-    }
-
-    const error = new Error(errorMessage);
-    (error as any).status = response.status;
-    return error;
+    return this.request<T>(endpoint, 'DELETE');
   }
 }
 
-// シングルトンインスタンスをエクスポート
+// APIクライアントのシングルトンインスタンス
 export const apiClient = new ApiClient(); 

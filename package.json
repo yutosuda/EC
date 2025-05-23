@@ -13,7 +13,7 @@
     "start": "next start",
     "backend:dev": "nodemon --watch src/backend src/backend/server.ts",
     "backend:build": "tsc -p src/backend/tsconfig.json",
-    "backend:start": "node dist/server.js",
+    "backend:start": "node src/backend/dist/server.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run backend:dev\"",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -25,7 +25,12 @@
     "test:api": "jest --testPathPattern=src/backend/tests/api.test.ts",
     "test:integration": "jest --config tests/integration/jest.config.js",
     "test:integration:watch": "jest --config tests/integration/jest.config.js --watch",
-    "test:integration:coverage": "jest --config tests/integration/jest.config.js --coverage"
+    "test:integration:coverage": "jest --config tests/integration/jest.config.js --coverage",
+    "test:integration:simple": "jest --config tests/integration/jest.config.js tests/integration/product.simple.test.ts",
+    "test:integration:comprehensive": "jest --config tests/integration/jest.config.js tests/integration/product.comprehensive.test.ts",
+    "test:integration:all": "jest --config tests/integration/jest.config.js 'tests/integration/.*\\.test\\.ts'",
+    "test:e2e": "jest --config tests/e2e/jest.config.js",
+    "clean": "rm -rf .next src/backend/dist"
   },
   "repository": {
     "type": "git",
@@ -54,9 +59,11 @@
     "stripe": "^15.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.7",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",

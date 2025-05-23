@@ -2,7 +2,7 @@
  * 商品検索機能の連携テスト
  * フロントエンドとバックエンドの連携を検証
  */
-import express, { Application } from 'express';
+import express, { Application, Express as IExpress } from 'express';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import dotenv from 'dotenv';
@@ -169,7 +169,7 @@ describe('商品検索機能の連携テスト', () => {
     console.log('テスト環境を初期化します...');
     
     // テスト環境のセットアップ
-    const env = await setupTestEnvironment(app);
+    const env = await setupTestEnvironment(app as unknown as IExpress);
     apiClient = env.apiClient;
     mongod = env.mongod;
     

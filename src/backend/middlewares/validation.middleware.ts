@@ -1,17 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { validateEmail, validatePasswordStrength, validateJapanesePhoneNumber, 
   validateJapanesePostalCode, validateRequired, validateNumberRange, 
   validateSKU, validateObjectId, validateMaxLength, validateObject } from '../utils/validation.util';
 import { createValidationError } from '../utils/error.util';
 
 // バリデーションミドルウェアのファクトリ関数
-export const validate = (validationFn: (req: Request) => { valid: boolean; errors: Record<string, string> }) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+export const validate = (validationFn: (req: Request) => { valid: boolean; errors: Record<string, string> }): RequestHandler => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     const validation = validationFn(req);
     
     if (!validation.valid) {
       const error = createValidationError(validation.errors);
-      return res.status(error.statusCode).json(error.toResponse());
+      res.status(error.statusCode).json(error.toResponse());
+      return;
     }
     
     next();

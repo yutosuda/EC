@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { APIError, convertToAPIError, ErrorCode } from '../utils/error.util';
 import mongoose from 'mongoose';
 
@@ -69,8 +69,13 @@ export const notFoundHandler = (req: Request, res: Response) => {
 };
 
 // 非同期ルートハンドラーのラッパー
-export const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+// コントローラーメソッドはPromise<Response>などを返す可能性があるが、
+// Express.jsのRequestHandlerに適合させるためのラッパー
+type AsyncRequestHandler = (req: Request, res: Response, next: NextFunction) => Promise<any>;
+
+export const asyncHandler = (fn: AsyncRequestHandler): RequestHandler => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    // Promise.resolveを使用してPromiseを確実に処理し、エラーをcatchしてnextに渡す
     Promise.resolve(fn(req, res, next)).catch(next);
   };
 }; 
